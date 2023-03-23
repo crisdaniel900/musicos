@@ -3,7 +3,11 @@ abstract class musico
 {
 public string Nombre {get; set;}
 public musico (string n) {Nombre = n;}
-public void saluda () {Console.WriteLine($"Hola a todos soy {Nombre}"  );}
+public virtual string  GetSaludo() => "Hola soy" + Nombre;
+
+public virtual void Saludar() => Console.WriteLine(GetSaludo());
+
+
 public abstract /*virtual*/ void Toca ();
             /*{
                 Console.WriteLine($"{Nombre} tocando su intrumento" );
@@ -13,20 +17,19 @@ public abstract /*virtual*/ void Toca ();
 }
 
 
-class bateria: musico
+class Baterista:musico
 {
-public string baterista  {get; set;}
-public  bateria (string n, string b):base(n)
-  {
-    baterista = b;
+    public string Bateria {get; set;}
 
-  }
-    public override void Toca()
-    {
-        Console.WriteLine($"{Nombre} tocando su {baterista}" );
-    }
+    public Baterista(string nombre, string bateria):base(nombre) => Bateria = bateria;
 
+    public override /*new*/ void Toca() => Console.WriteLine($"{Nombre} está tocando su {Bateria}");
+    //para implementar metodos abstractos debemos de usar la palabra reservada override (redefinir/sobreescribir)
+
+    public override string GetSaludo() => base.GetSaludo() + " y soy baterísta" ;
+    public override void Saludar() => Console.WriteLine(GetSaludo());
 }
+
 
 class bajista:musico
 {
@@ -38,6 +41,7 @@ public bajista (string n, string b):base(n)
   }
     public override void Toca()
     {
+      base.Saludar();
         Console.WriteLine($"{Nombre} tocando su {bajo}" );
     }
 
@@ -50,10 +54,10 @@ public bajista (string n, string b):base(n)
     {
         List <musico> grupo = new List<musico>();
         grupo.Add(new bajista("Joe", "Yahmaha"));
-        grupo.Add(new bateria("Pepe", "Bateria") );
+        grupo.Add(new Baterista("Pepe", "Bateria") );
 
         foreach(var m in grupo)
-        m.saluda();
+        m.Saludar();
           foreach(var m in grupo)
         m.Toca();
 
